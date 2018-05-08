@@ -1,0 +1,20 @@
+.presente
+{
+    background-color: #4cc450;
+}
+
+.ritardobreve
+{
+    background-color: #e08e2e;
+}
+
+.ritardograve
+{
+    background-color: #bf0000;
+}
+
+.assente
+{
+    background-color: black;
+    color: white;
+}

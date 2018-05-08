@@ -1,9 +1,9 @@
 <?php
   Class dbcontroller{
 
-  private $servername="Localhost";
-  private $username="root";
-  private $password="";
+  private $servername="192.168.110.80";
+  private $username="luq";
+  private $password="root";
   private $dbname="scuola";
   private $conn;
 

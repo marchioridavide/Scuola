@@ -21,7 +21,8 @@
     <th>id studente</th>
     <th>Name</th>
     <th>Surname</th>
-    <th>Date</th>
+    <th>Birth date</th>
+    <th>date</th>
     <th>Time</th>
   </tr>
   
@@ -29,13 +30,14 @@
   $row = $result->fetch();
   date_default_timezone_set("Europe/Rome");
   $student = new studente($row[0], $row[1], $row[2], $row[3], $row[4], date("Y-m-d"), date("h:i:sa") );
+    
   if (!isset($_SESSION['logged_users']))
   {
-      $_SESSION['logged_users'] = array(serialize($student));
+        $_SESSION['logged_users'] = array(serialize($student));
   }
   else
   {
-    array_push($_SESSION['logged_users'], serialize($student));
+         if (contains($_SESSION['logged_users'], $_GET['badgeId']) == false & isset($_GET['badgeId']))array_push($_SESSION['logged_users'], serialize($student));
   }
 
   foreach($_SESSION['logged_users']  as $studente)
@@ -43,8 +45,36 @@
     $temp = unserialize($studente);
     $temp -> printStudentData();
   }
+    echo "</table>";
+  echo "Studenti rimanenti";
+    
+  $result = $dbhandle->runquery("select * from studenti");
+    
+    echo "<table>";
+    
+    while($row = $result->fetch())
+    {
+        if (contains($_SESSION['logged_users'], $row[0]) == false)
+        {
+            echo "<tr>";
+                echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td>";
+            echo "</tr>";
+        }
+    }
+    
+    echo "</table>";
 
+    
+    function contains($array, $elementid)
+    {
+        foreach($array as $s)
+        {
+            if (unserialize($s)->getID() == $elementid) return true;
+        }
+        return false;
+    }
 ?>
+    
 </table>
 
 </body>

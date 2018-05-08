@@ -1,3 +1,7 @@
+<html>
+    <head>
+        <link rel =stylesheet href="style.css">
+    </head>
 <?php
 
 class studente
@@ -22,13 +26,33 @@ class studente
         $this-> tempo = $time;
     }
 
+    
     function printStudentData()
     {
-        echo "<tr>";
-        echo " <td>" .$this->Nome. "</td><td>" .$this->Cognome. "</td> <td>" .$this->DataDiNascita. "</td> <td>" .$this->data. "</td><td>" .$this->tempo."</td>";
+          if (date($this->tempo > "08:30:00am"))
+          {
+              $presenza = "ritardograve";
+          }
+          elseif(date($this->tempo > "08:10:59am"))
+          {
+              $presenza = "ritardobreve";
+          }
+          else
+          {
+              $presenza = "presente";
+          }
+        
+        echo "<tr class = '$presenza'>";
+        echo " <td>".$this->idstudenti."</td><td>" .$this->Nome. "</td><td>" .$this->Cognome. "</td> <td>" .$this->DataDiNascita. "</td> <td>" .$this->data. "</td><td>" .$this->tempo."</td>";
         echo "</tr>";
+    }
+    
+    function getID()
+    {
+        return $this->idstudenti;
     }
 }
 
 
 ?>
+</html>
