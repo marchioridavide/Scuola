@@ -27,28 +27,26 @@
   </tr>
   
 <?php
-  $row = $result->fetch();
-  date_default_timezone_set("Europe/Rome");
-  $student = new studente($row[0], $row[1], $row[2], $row[3], $row[4], date("Y-m-d"), date("h:i:sa") );
+    session_start();    
+    if(!isset($_SESSION['user_logged'])) header("Location: login.php");
+    echo "<h1>".$_SESSION['user_logged']."</h1>";
     
-  if (!isset($_SESSION['logged_users']))
-  {
-        $_SESSION['logged_users'] = array(serialize($student));
-  }
-  else
-  {
-         if (contains($_SESSION['logged_users'], $_GET['badgeId']) == false & isset($_GET['badgeId']))array_push($_SESSION['logged_users'], serialize($student));
-  }
+    if(!isset($_SESSION['logged_users'])) $_SESSION['logged_users'] = array();
+    $row = $result->fetch();
+    date_default_timezone_set("Europe/Rome");
+    $student = new studente($row[0], $row[1], $row[2], $row[3], $row[4], date("Y-m-d"), date("H:i:sa") );
+ 
+    if (contains($_SESSION['logged_users'], $_GET['badgeId']) == false & isset($_GET['badgeId']))array_push($_SESSION['logged_users'], serialize($student));
 
-  foreach($_SESSION['logged_users']  as $studente)
-  {
-    $temp = unserialize($studente);
-    $temp -> printStudentData();
-  }
+    foreach($_SESSION['logged_users']  as $studente)
+    {
+        $temp = unserialize($studente);
+        $temp -> printStudentData();
+    }
     echo "</table>";
-  echo "Studenti rimanenti";
+    echo "Studenti rimanenti";
     
-  $result = $dbhandle->runquery("select * from studenti");
+    $result = $dbhandle->runquery("select * from studenti");
     
     echo "<table>";
     

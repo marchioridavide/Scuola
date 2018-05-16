@@ -1,9 +1,9 @@
 <?php
   Class dbcontroller{
 
-  private $servername="192.168.110.80";
-  private $username="luq";
-  private $password="root";
+  private $servername="localhost";
+  private $username="root";
+  private $password="mysql";
   private $dbname="scuola";
   private $conn;
 
@@ -63,14 +63,15 @@ function register($name, $surname, $user, $email, $pwd){
 
 function login_control($username, $pasw){
   try{
-    $query = "SELECT * FROM REGISTER WHERE username='$username' AND pasw='$pasw'";
+    $query = "SELECT * FROM accounts WHERE username='$username' AND password='$pasw'";
     $result = $this->runQuery($query);
     $res = $result->fetch();
     $id = $res['id'];
     if(is_numeric[$id])
     {
-      Header("Location: index.php");
+        return $res['username'];
     }
+      
  }
   catch(PDOException $e){
     echo 'Error: '.$e->getMessage();
