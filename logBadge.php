@@ -1,3 +1,4 @@
+
 <?php 
     session_start();
     require_once("dbController.php");
@@ -14,53 +15,113 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="stylesheet.css">
+<link rel = "stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
 </head>
 <body>
-<table>
-  <tr>
+    
+ <nav class="navbar navbar-expand-lg navbar-light bg-light">
+     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <?php
+                if($_SESSION['admin'] == true)
+                {
+                  echo '<li class="nav-item">
+                  <a class="nav-link" href="add_account.php">Aggiungi utente<span class="sr-only">(current)</span></a>
+                    </li>';
+                }
+                 if(isset($_SESSION['user_logged']))
+                {
+                   echo '<li class="nav-item   ">
+                   <a class="nav-link" href="logout.php">Log out<span class="sr-only">(current)</span></a>
+                   </li>';
+                }
+            ?>
+            <li class="nav-item active">
+                <a class="nav-link" href="logBadge.php">Log badge</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<table class='table table-striped'>
+<thead class='thead-dark'>
+<tr>
     <th>id studente</th>
-    <th>Name</th>
-    <th>Surname</th>
-    <th>Birth date</th>
-    <th>date</th>
-    <th>Time</th>
+    <th>Nome</th>
+    <th>Cognome</th>
+    <th>Data di nascita</th>
+    <th>Eventi</th>
   </tr>
+    <thead>
   
 <?php
-    session_start();    
+    if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
+
     if(!isset($_SESSION['user_logged'])) header("Location: login.php");
     echo "<h1>".$_SESSION['user_logged']."</h1>";
-    
-    if(!isset($_SESSION['logged_users'])) $_SESSION['logged_users'] = array();
-    $row = $result->fetch();
     date_default_timezone_set("Europe/Rome");
-    $student = new studente($row[0], $row[1], $row[2], $row[3], $row[4], date("Y-m-d"), date("H:i:sa") );
- 
-    if (contains($_SESSION['logged_users'], $_GET['badgeId']) == false & isset($_GET['badgeId']))array_push($_SESSION['logged_users'], serialize($student));
-
-    foreach($_SESSION['logged_users']  as $studente)
-    {
-        $temp = unserialize($studente);
-        $temp -> printStudentData();
-    }
-    echo "</table>";
-    echo "Studenti rimanenti";
-    
-    $result = $dbhandle->runquery("select * from studenti");
-    
-    echo "<table>";
-    
+    if(isset($_GET['badgeId']))$dbhandle->setPresente($badgeid);
+//    if(!isset($_SESSION['logged_users'])) $_SESSION['logged_users'] = array();
+//    $row = $result->fetch();
+//    date_default_timezone_set("Europe/Rome");
+//    $student = new studente($row[0], $row[1], $row[2], $row[3], $row[4], date("Y-m-d"), date("H:i:s") );
+// 
+//    if (contains($_SESSION['logged_users'], $_GET['badgeId']) == false & isset($_GET['badgeId']))
+//    array_push($_SESSION['logged_users'], serialize($student));
+//
+//    foreach($_SESSION['logged_users']  as $studente)
+//    {
+//        $temp = unserialize($studente);
+//        $temp -> printStudentData();
+//    }
+    $result = $dbhandle->runQuery("select * from studenti where idstudenti in(select id_studente from presenze where giorno ='".date("Y-m-d")."')");
+        
     while($row = $result->fetch())
     {
-        if (contains($_SESSION['logged_users'], $row[0]) == false)
+        $id = $row[0];
+        $notifications = $dbhandle->numRows("select * from stev where id_studente = $id");
+        echo "<tr class = 'presente'>";
+        if($notifications != 0)
         {
-            echo "<tr>";
-                echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td>";
-            echo "</tr>";
+            echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td><center><div class = 'notifications'>$notifications</div></center></td>";
         }
+        else
+        {
+            echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td></td>";
+        }
+        echo "</tr>";
+    }
+       
+    echo "</tbody>
+    </table>";
+    echo "Studenti rimanenti";
+    
+    $result = $dbhandle->runQuery("select * from studenti where idstudenti not in(select id_studente from presenze where giorno ='".date("Y-m-d")."')");
+    
+    echo "<table class='table table-striped'>
+        <thead class='thead-dark'>
+            <tr>
+            <th scope='col'>Id studente</th>
+            <th scope='col'>Nome</th>
+            <th scope='col'>Cognome</th>
+            <th scope='col'>Data di nascita</th>
+            </tr>
+        </thead>
+        
+        <tbody>";
+
+    while($row = $result->fetch())
+    {
+        echo "<tr>";
+        echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td>";
+        echo "</tr>";
     }
     
-    echo "</table>";
+    echo "</tbody>
+        </table>";
 
     
     function contains($array, $elementid)

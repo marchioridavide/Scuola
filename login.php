@@ -5,29 +5,47 @@
         <link rel = "stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
     </head>
     <body>
-        <br>
-        <br>
-        <div class = "container">
-        <form action = '' method = 'post'>
-            <br>
-            
-                <label class="control-label col-sm-2">Username:</label>
-                <input type = 'text' placeholder = "username" name = "username" class="inputtext">
-            
-                <br>
-            <br>
-            
-                <label class="control-label col-sm-2">Password:</label>
-                <input type = 'password' placeholder = "password" name = "pass" class="inputtext">
-            
+        
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <?php
+                  session_start();
+                  if($_SESSION['admin'] == true)
+                  {
+                    echo '<li class="nav-item">
+                    <a class="nav-link" href="add_account.php">Aggiungi utente<span class="sr-only">(current)</span></a>
+                    </li>';
+                  }
+                  if(isset($_SESSION['user_logged']))
+                  {
+                    echo '<li class="nav-item">
+                    <a class="nav-link" href="logout.php">Log out<span class="sr-only">(current)</span></a>
+                    </li>';
+                  }
+                ?>
+              <li class="nav-item">
+                <a class="nav-link" href="logBadge.php">Log badge</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        
+        <div class="login-form">
+            <form action = '' method = 'post'>
+                <div class="from-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" name="username" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+
+                <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input type="password" name="pass" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                </div>
+
                 <input type = "hidden" name = "type" value = "log">
-            
-            <br>
-            <br>
-            
-                <input type = "submit" class="sub">
-            
-        </form>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
             <?php
             
@@ -39,7 +57,8 @@
                     if($res != false)
                     {
                         session_start();
-                       $_SESSION['user_logged'] = $_POST['username']; 
+                        $_SESSION['user_logged'] = $res; 
+                        $_SESSION['admin'] = $dbhandler->isadmin($res);
                         header("Location: logBadge.php");
                     }
                     else

@@ -29,17 +29,13 @@ class studente
     
     function printStudentData()
     {
-          if (date($this->tempo > "08:30:00am"))
-          {
-              $presenza = "ritardograve";
-          }
-          elseif(date($this->tempo > "08:10:59am"))
-          {
-              $presenza = "ritardobreve";
-          }
-          else
+        require_once('dbController.php');
+        $dbhandler = new dbcontroller();
+        
+          if (date($this->tempo < "20:30:59"))
           {
               $presenza = "presente";
+              $dbhandler->setPresente($this->idstudenti);
           }
         
         echo "<tr class = '$presenza'>";

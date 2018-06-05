@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 05, 2018 at 06:49 AM
+-- Generation Time: Jun 05, 2018 at 09:29 PM
 -- Server version: 5.7.19-log
 -- PHP Version: 5.6.31
 
@@ -32,14 +32,18 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `password` varchar(45) NOT NULL,
   `admin` tinyint(4) DEFAULT NULL,
   `idprof` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `accounts`
 --
 
 INSERT INTO `accounts` (`id`, `username`, `password`, `admin`, `idprof`) VALUES
-(2, 'lol', 'd41d8cd98f00b204e9800998ecf8427e', NULL, NULL);
+(2, 'lol', 'd41d8cd98f00b204e9800998ecf8427e', NULL, NULL),
+(3, 'mem', 'd41d8cd98f00b204e9800998ecf8427e', 1, 1),
+(6, 'sese', 'd41d8cd98f00b204e9800998ecf8427e', 1, NULL),
+(7, 'giulio', '6dd1411a66159040b7fff30d0097dbe4', NULL, NULL),
+(9, 'francuzzo', '189bbbb00c5f1fb7fba9ad9285f193d1', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -75,6 +79,28 @@ CREATE TABLE IF NOT EXISTS `classi_prof` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `evento`
+--
+
+CREATE TABLE IF NOT EXISTS `evento` (
+  `id` int(11) NOT NULL,
+  `tipo` varchar(20) NOT NULL,
+  `in_ora` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `evento`
+--
+
+INSERT INTO `evento` (`id`, `tipo`, `in_ora`) VALUES
+(1, 'assenza', NULL),
+(2, 'ritardo', 2),
+(3, 'ritardo', 3),
+(4, 'breve', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `materia`
 --
 
@@ -86,16 +112,29 @@ CREATE TABLE IF NOT EXISTS `materia` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orario`
+-- Table structure for table `presenze`
 --
 
-CREATE TABLE IF NOT EXISTS `orario` (
-  `idorario` int(11) NOT NULL,
-  `id_prof` int(11) DEFAULT NULL,
-  `id_classe` int(11) DEFAULT NULL,
-  `ora_inizio` time NOT NULL,
-  `ora_fine` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `presenze` (
+  `id` int(11) NOT NULL,
+  `giorno` date NOT NULL,
+  `id_studente` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `presenze`
+--
+
+INSERT INTO `presenze` (`id`, `giorno`, `id_studente`) VALUES
+(14, '2018-06-05', 1),
+(15, '2018-06-05', 3),
+(16, '2018-06-05', 6),
+(17, '2018-06-05', 7),
+(18, '2018-06-05', 9),
+(19, '2018-06-05', 10),
+(20, '2018-06-05', 15),
+(21, '2018-06-05', 11),
+(22, '2018-06-05', 13);
 
 -- --------------------------------------------------------
 
@@ -108,7 +147,14 @@ CREATE TABLE IF NOT EXISTS `prof` (
   `Nome` varchar(45) NOT NULL,
   `Cognome` varchar(45) NOT NULL,
   `DataDiNascita` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `prof`
+--
+
+INSERT INTO `prof` (`idprof`, `Nome`, `Cognome`, `DataDiNascita`) VALUES
+(1, 'franco', 'franzi', '1999-04-02');
 
 -- --------------------------------------------------------
 
@@ -120,6 +166,27 @@ CREATE TABLE IF NOT EXISTS `prof_materia` (
   `idProf` int(11) DEFAULT NULL,
   `idMateria` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stev`
+--
+
+CREATE TABLE IF NOT EXISTS `stev` (
+  `id` int(11) NOT NULL,
+  `id_evento` int(11) NOT NULL,
+  `id_studente` int(11) NOT NULL,
+  `giorno` date NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `stev`
+--
+
+INSERT INTO `stev` (`id`, `id_evento`, `id_studente`, `giorno`) VALUES
+(1, 4, 11, '2018-06-05'),
+(2, 2, 13, '2018-06-05');
 
 -- --------------------------------------------------------
 
@@ -184,6 +251,12 @@ ALTER TABLE `classi_prof`
   ADD KEY `idProf_idx` (`idProf`);
 
 --
+-- Indexes for table `evento`
+--
+ALTER TABLE `evento`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `materia`
 --
 ALTER TABLE `materia`
@@ -191,12 +264,11 @@ ALTER TABLE `materia`
   ADD UNIQUE KEY `idmateria_UNIQUE` (`idmateria`);
 
 --
--- Indexes for table `orario`
+-- Indexes for table `presenze`
 --
-ALTER TABLE `orario`
-  ADD PRIMARY KEY (`idorario`),
-  ADD KEY `id_prof_idx` (`id_prof`),
-  ADD KEY `id_classe_idx` (`id_classe`);
+ALTER TABLE `presenze`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_studente` (`id_studente`);
 
 --
 -- Indexes for table `prof`
@@ -211,6 +283,14 @@ ALTER TABLE `prof`
 ALTER TABLE `prof_materia`
   ADD KEY `idProf_idx` (`idProf`),
   ADD KEY `idMateria_idx` (`idMateria`);
+
+--
+-- Indexes for table `stev`
+--
+ALTER TABLE `stev`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_evento` (`id_evento`),
+  ADD KEY `id_studente` (`id_studente`);
 
 --
 -- Indexes for table `studenti`
@@ -228,27 +308,37 @@ ALTER TABLE `studenti`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `classi`
 --
 ALTER TABLE `classi`
   MODIFY `idClassi` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
+-- AUTO_INCREMENT for table `evento`
+--
+ALTER TABLE `evento`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
 -- AUTO_INCREMENT for table `materia`
 --
 ALTER TABLE `materia`
   MODIFY `idmateria` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `orario`
+-- AUTO_INCREMENT for table `presenze`
 --
-ALTER TABLE `orario`
-  MODIFY `idorario` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `presenze`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `prof`
 --
 ALTER TABLE `prof`
-  MODIFY `idprof` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idprof` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `stev`
+--
+ALTER TABLE `stev`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `studenti`
 --
@@ -273,11 +363,10 @@ ALTER TABLE `classi_prof`
   ADD CONSTRAINT `idProf` FOREIGN KEY (`idProf`) REFERENCES `prof` (`idprof`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `orario`
+-- Constraints for table `presenze`
 --
-ALTER TABLE `orario`
-  ADD CONSTRAINT `id_classe` FOREIGN KEY (`id_classe`) REFERENCES `classi` (`idClassi`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `id_prof` FOREIGN KEY (`id_prof`) REFERENCES `prof` (`idprof`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `presenze`
+  ADD CONSTRAINT `presenze_ibfk_1` FOREIGN KEY (`id_studente`) REFERENCES `studenti` (`idstudenti`);
 
 --
 -- Constraints for table `prof_materia`
@@ -285,6 +374,14 @@ ALTER TABLE `orario`
 ALTER TABLE `prof_materia`
   ADD CONSTRAINT `ideMateria` FOREIGN KEY (`idMateria`) REFERENCES `materia` (`idmateria`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `ideProf` FOREIGN KEY (`idProf`) REFERENCES `prof` (`idprof`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `stev`
+--
+ALTER TABLE `stev`
+  ADD CONSTRAINT `stev_ibfk_1` FOREIGN KEY (`id_evento`) REFERENCES `evento` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `stev_ibfk_2` FOREIGN KEY (`id_evento`) REFERENCES `evento` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `stev_ibfk_3` FOREIGN KEY (`id_studente`) REFERENCES `studenti` (`idstudenti`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `studenti`
