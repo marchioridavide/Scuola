@@ -43,13 +43,13 @@ function numRows($query) {
 }
  
 
-function register($name, $surname, $user, $email, $pwd){
+function register($user, $pwd){
      try{
           // prepare a query and execute it
-          $query = "INSERT INTO REGISTER (name, surname, username, email, pasw) VALUES (:name, :surname, :user, :email, :password)";
+          $query = "INSERT INTO accounts (username, password) VALUES (:username, :password)";
           //echo $query; //for debug
           $sql = $this->conn->prepare($query);
-          $sql->execute(array(':name'=>$name, ':surname'=>$surname, ':user'=>$user, ':email'=>$email, ':password'=>$pwd));
+          $sql->execute(array(':username'=>$user, ':password'=>$pwd));
           return true;
      }
      catch(PDOException $e){
@@ -63,7 +63,7 @@ function register($name, $surname, $user, $email, $pwd){
 
 function login_control($username, $pasw){
   try{
-    $query = "SELECT * FROM accounts WHERE username='$username' AND password='$pasw'";
+    $query = "SELECT * FROM accounts WHERE username='$username' AND password='".md5($passw)."'";
     $result = $this->runQuery($query);
     $res = $result->fetch();
     $id = $res['id'];

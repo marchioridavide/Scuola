@@ -1,14 +1,34 @@
 <html>
-    <head></head>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css">
+        <link rel = "stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
+    </head>
     <body>
-        <form action = 'login.php' method = 'post'>
+        <br>
+        <br>
+        <div class = "container">
+        <form action = '' method = 'post'>
+            <br>
             
-            <input type = 'text' placeholder = "username" name = "username">
-            <input type = 'password' placeholder = "password" name = "pass">
-            <input type = "hidden" name = "type" value = "log">
-            <input type = "submit">
+                <label class="control-label col-sm-2">Username:</label>
+                <input type = 'text' placeholder = "username" name = "username" class="inputtext">
+            
+                <br>
+            <br>
+            
+                <label class="control-label col-sm-2">Password:</label>
+                <input type = 'password' placeholder = "password" name = "pass" class="inputtext">
+            
+                <input type = "hidden" name = "type" value = "log">
+            
+            <br>
+            <br>
+            
+                <input type = "submit" class="sub">
             
         </form>
+        </div>
             <?php
             
                 include("dbController.php");
