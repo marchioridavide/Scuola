@@ -6,13 +6,18 @@
             <input type = 'text' placeholder = "username" name = "username">
             <input type = 'password' placeholder = "password" name = "pass">
             <input type = "hidden" name = "type" value = "add">
+            <?php
+                include("dbController.php");
+                $dbhandler = new dbcontroller();
+                $query = "select Nome, cognome, DataDiNascita from prof";
+                $res = $dbhandler->runQuery($query);
+                
+            ?>
             <input type = "submit">
             
         </form>
             <?php
             
-                include("dbController.php");
-                $dbhandler = new dbcontroller();
                 if (isset($_POST['type']) && $_POST['type'] == "add")
                 {
                     $username = $_POST['username'];
