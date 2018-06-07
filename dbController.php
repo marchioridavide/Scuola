@@ -3,7 +3,7 @@
 
   private $servername="localhost";
   private $username="root";
-  private $password="mysql";
+  private $password="root";
   private $dbname="scuola";
   private $conn;
 

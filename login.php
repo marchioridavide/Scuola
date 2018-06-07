@@ -3,6 +3,20 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="style.css">
         <link rel = "stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            document.getElementById("redirectButton").onclick=function()
+            {
+                setTimeout
+                (
+                    function()
+                    {
+                        document.location.href("logBadge.php");
+                    },500
+                );
+            }
+        </script>
     </head>
     <body>
         
@@ -59,15 +73,39 @@
                         session_start();
                         $_SESSION['user_logged'] = $res; 
                         $_SESSION['admin'] = $dbhandler->isadmin($res);
-                        header("Location: logBadge.php");
+                        showPopUp();
                     }
                     else
                     {
                         echo "Username o password errata";
                     }
                 }
-            
+                function showPopUp()
+                {
+                    echo "<script type='text/javascript'>
+                    $(document).ready(function(){
+                    $('#exampleModalCenter').modal('show');
+                    });
+                    </script>";
+                }
             ?>
-            
+            <div class='modal fade' id='exampleModalCenter' tabindex='-1' role='dialog' aria-labelledby='exampleModalCenterTitle' aria-hidden='true'>
+                <div class='modal-dialog modal-dialog-centered' role='document'>
+                    <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h5 class='modal-title' id='exampleModalLongTitle'>Success</h5>
+                        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                        <span aria-hidden='true'>&times;</span>
+                        </button>
+                    </div>
+                    <div class='modal-body'>
+                        <p>Login eseguito correttamente</p>
+                    </div>
+                    <div class='modal-footer'>
+                        <button class='btn btn-primary' id="redirectButton">Ok</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
     </body>
 </html>
