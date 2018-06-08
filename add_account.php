@@ -12,6 +12,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <?php
+                  session_start();
                   if($_SESSION['admin'] == true)
                   {
                     echo '<li class="nav-item active">

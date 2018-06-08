@@ -22,7 +22,7 @@
 .notifications{
     background-color: red;
     color: white;
-    border-radius: 50px;
+    border-radius: 100%;
     text-align: center;
     width:22px
 }

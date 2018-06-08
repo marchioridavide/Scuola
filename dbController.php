@@ -3,7 +3,7 @@
 
   private $servername="localhost";
   private $username="root";
-  private $password="root";
+  private $password="mysql";
   private $dbname="scuola";
   private $conn;
 
@@ -41,7 +41,7 @@ function numRows($query) {
   $sth->execute();
   return $sth->rowCount();
 }
- 
+
 
 function register($user, $pwd, $admin, $idprof){
      try{
@@ -81,7 +81,7 @@ function login_control($username, $pasw){
     {
         return $id;
     }
-      
+
  }
   catch(PDOException $e){
     echo 'Error: '.$e->getMessage();
@@ -98,9 +98,9 @@ function setPresente($id)
     {
         array_push($present, $row['id_studente']);
     }
-    
+
     $time = date("H:i:s");
-    
+
     if(!in_array($id, $present) && date($time < "20:15:59"))
     {
         $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
@@ -115,7 +115,7 @@ function setPresente($id)
 
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':giorno'=>date("Y-m-d"), ':id'=>$id));
-        
+
         $query = "insert into stev (id_evento, id_studente, giorno) values (:idev, :id, :giorno)";
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':idev'=>4, ':id'=>$id, ':giorno'=>date("Y-m-d")));
@@ -126,7 +126,7 @@ function setPresente($id)
 
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':giorno'=>date("Y-m-d"), ':id'=>$id));
-        
+
         $query = "insert into stev (id_evento, id_studente, giorno) values (:idev, :id, :giorno)";
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':idev'=>2, ':id'=>$id, ':giorno'=>date("Y-m-d")));
@@ -137,7 +137,7 @@ function setPresente($id)
 
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':giorno'=>date("Y-m-d"), ':id'=>$id));
-        
+
         $query = "insert into stev (id_evento, id_studente, giorno) values (:idev, :id, :giorno)";
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':idev'=>3, ':id'=>$id, ':giorno'=>date("Y-m-d")));
