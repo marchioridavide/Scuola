@@ -16,9 +16,22 @@
 <head>
 <link rel="stylesheet" type="text/css" href="stylesheet.css">
 <link rel = "stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
 </head>
 <body>
     
+<div id = "bigmodal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <center>
+            <div class = "scroll">
+            </div>
+        </center>
+    </div>
+  </div>
+</div>
+
  <nav class="navbar navbar-expand-lg navbar-light bg-light">
      <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
@@ -86,7 +99,7 @@
         echo "<tr class = 'presente'>";
         if($notifications != 0)
         {
-            echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td><center><div class = 'notifications'>$notifications</div></center></td>";
+            echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td><center><div class = 'notifications'><a data-toggle='modal' href='#bigmodal'>$notifications</a></div></center></td>";
         }
         else
         {
@@ -133,6 +146,8 @@
         return false;
     }
 ?>
+        
+
     
 </table>
 

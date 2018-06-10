@@ -64,3 +64,9 @@
     margin-left: 20%;
     margin-top: 15%;
 }
+.scroll
+{
+    background-color:white;
+    overflow-y: scroll;
+    min-height: 200px;
+}

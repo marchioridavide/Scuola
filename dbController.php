@@ -11,6 +11,10 @@
     $this-> connectDB();
   }
   function connectDB() {
+//      $dbcreds = fopen("../../db/db.txt", "r") or die("Unable to open file!");
+//      $username = fgets($dbcreds);
+//      $password = fgets($dbcreds);
+//      fclose($dbcreds);
 	  try
 	  {
 	    $this->conn = new PDO("mysql:host=$this->servername;dbname=$this->dbname", $this->username, $this->password);
@@ -101,7 +105,7 @@ function setPresente($id)
 
     $time = date("H:i:s");
 
-    if(!in_array($id, $present) && date($time < "20:15:59"))
+    if(!in_array($id, $present) && date($time < "23:00:59"))
     {
         $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
@@ -109,7 +113,7 @@ function setPresente($id)
         $sql->execute(array(':giorno'=>date("Y-m-d"), ':id'=>$id));
         return true;
     }
-    elseif(!in_array($id, $present) && date($time < "20:30:59"))
+    elseif(!in_array($id, $present) && date($time < "23:30:59"))
     {
         $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
@@ -120,7 +124,7 @@ function setPresente($id)
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':idev'=>4, ':id'=>$id, ':giorno'=>date("Y-m-d")));
     }
-    elseif(!in_array($id, $present) && date($time < "21:30:59"))
+    elseif(!in_array($id, $present) && date($time < "23:40:59"))
     {
         $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
@@ -131,7 +135,7 @@ function setPresente($id)
         $sql = $this->conn->prepare($query);
         $sql->execute(array(':idev'=>2, ':id'=>$id, ':giorno'=>date("Y-m-d")));
     }
-    elseif(!in_array($id, $present) && date($time < "22:30:59"))
+    elseif(!in_array($id, $present) && date($time < "22:50:59"))
     {
         $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 

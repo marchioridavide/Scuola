@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 05, 2018 at 09:29 PM
--- Server version: 5.7.19-log
+-- Generation Time: Jun 10, 2018 at 09:57 PM
+-- Server version: 5.6.37
 -- PHP Version: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `password` varchar(45) NOT NULL,
   `admin` tinyint(4) DEFAULT NULL,
   `idprof` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `accounts`
@@ -43,7 +43,8 @@ INSERT INTO `accounts` (`id`, `username`, `password`, `admin`, `idprof`) VALUES
 (3, 'mem', 'd41d8cd98f00b204e9800998ecf8427e', 1, 1),
 (6, 'sese', 'd41d8cd98f00b204e9800998ecf8427e', 1, NULL),
 (7, 'giulio', '6dd1411a66159040b7fff30d0097dbe4', NULL, NULL),
-(9, 'francuzzo', '189bbbb00c5f1fb7fba9ad9285f193d1', 1, NULL);
+(9, 'francuzzo', '189bbbb00c5f1fb7fba9ad9285f193d1', 1, NULL),
+(10, 'fweffw', '9a70adefdd1226b08e2785798ca2b521', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -119,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `presenze` (
   `id` int(11) NOT NULL,
   `giorno` date NOT NULL,
   `id_studente` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `presenze`
@@ -134,7 +135,8 @@ INSERT INTO `presenze` (`id`, `giorno`, `id_studente`) VALUES
 (19, '2018-06-05', 10),
 (20, '2018-06-05', 15),
 (21, '2018-06-05', 11),
-(22, '2018-06-05', 13);
+(22, '2018-06-05', 13),
+(23, '2018-06-10', 13);
 
 -- --------------------------------------------------------
 
@@ -308,7 +310,7 @@ ALTER TABLE `studenti`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `classi`
 --
@@ -328,7 +330,7 @@ ALTER TABLE `materia`
 -- AUTO_INCREMENT for table `presenze`
 --
 ALTER TABLE `presenze`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `prof`
 --
