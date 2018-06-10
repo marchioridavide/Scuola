@@ -7,8 +7,16 @@
     $dbhandle = new dbcontroller();
     
 
-    $query = "SELECT * FROM studenti WHERE idstudenti = '$badgeid' " ;
-    $result = $dbhandle->runquery($query);
+    try
+    {
+        $query = "SELECT * FROM studenti WHERE idstudenti = '$badgeid' " ;
+        $result = $dbhandle->runquery($query);
+    }
+    catch(Exception $e)
+    {
+        echo "<script>alert('badge non valido');</script>";
+    }
+    
 ?>
 
 
