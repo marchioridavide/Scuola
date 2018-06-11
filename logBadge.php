@@ -1,21 +1,13 @@
 
 <?php 
     session_start();
+    //if(!isset($_SERVER['https'])) header("Location: https://127.0.0.1/Scuola/logBadge.php");
     require_once("dbController.php");
     require_once("studente.php");
     $badgeid = $_GET["badgeId"];
     $dbhandle = new dbcontroller();
-    
 
-    try
-    {
-        $query = "SELECT * FROM studenti WHERE idstudenti = '$badgeid' " ;
-        $result = $dbhandle->runquery($query);
-    }
-    catch(Exception $e)
-    {
-        echo "<script>alert('badge non valido');</script>";
-    }
+    $dbhandle->checkAssenza();S
     
 ?>
 
@@ -82,7 +74,23 @@
     } 
 
     if(!isset($_SESSION['user_logged'])) header("Location: login.php");
-    echo "<h1>".$_SESSION['user_logged']."</h1>";
+    
+    echo "<br><form action = '' method = 'get'>";
+        
+        $classe = $_GET['classi'];
+        $query = "select * from classi";
+        $res = $dbhandle->runQuery($query);
+        echo "<select name = 'classi' class='form-control' selected=$classe><option>Tutte le classi</option>";
+        while($row = $res->fetch())
+        {
+            $classe = $row['Nome'];
+            echo "<option>$classe</option>";
+        }
+        echo "</select><br>";
+        echo "<button type = 'submit' class='btn btn-primary'>Applica</button><br><br>";
+        
+    echo "</form>";
+        
     date_default_timezone_set("Europe/Rome");
     if(isset($_GET['badgeId']))$dbhandle->setPresente($badgeid);
 //    if(!isset($_SESSION['logged_users'])) $_SESSION['logged_users'] = array();
@@ -98,9 +106,17 @@
 //        $temp = unserialize($studente);
 //        $temp -> printStudentData();
 //    }
-    $result = $dbhandle->runQuery("select * from studenti where idstudenti in(select id_studente from presenze where giorno ='".date("Y-m-d")."')");
+    if(!isset($_GET['classi']) || $_GET['classi'] == "Tutte le classi")   //check if is set a class filter
+    {
+        $result = $dbhandle->runQuery("select * from studenti where idstudenti in(select id_studente from presenze where giorno ='".date("Y-m-d")."')");
+    }
+    else
+    {
+        $classe = $_GET['classi'];
+        $result = $dbhandle->runQuery("select * from studenti, classi where studenti.idClasse = classi.idClassi and classi.Nome = '$classe' and idstudenti in(select id_studente from presenze where giorno ='".date("Y-m-d")."')");
+    }
         
-    while($row = $result->fetch())
+    while($row = $result->fetch())           //apply notifications badge
     {
         $id = $row[0];
         $notifications = $dbhandle->numRows("select * from stev where id_studente = $id");
@@ -118,9 +134,18 @@
        
     echo "</tbody>
     </table>";
-    echo "Studenti rimanenti";
-    
-    $result = $dbhandle->runQuery("select * from studenti where idstudenti not in(select id_studente from presenze where giorno ='".date("Y-m-d")."')");
+    echo "Studenti assenti";
+        
+    if(!isset($_GET['classi']) || $_GET['classi'] == "Tutte le classi")
+    {
+        $result = $dbhandle->runQuery("select * from studenti where idstudenti not in(select id_studente from presenze where giorno ='".date("Y-m-d")."')"); 
+    }
+    else
+    {
+        $classe = $_GET['classi'];
+        $result = $dbhandle->runQuery("select * from studenti, classi where studenti.idClasse = classi.idClassi and classi.Nome = '$classe' and idstudenti not in(select id_studente from presenze where giorno ='".date("Y-m-d")."')"); 
+    }
+            
     
     echo "<table class='table table-striped'>
         <thead class='thead-dark'>

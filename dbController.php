@@ -116,15 +116,16 @@ function setPresente($id)
         $hour = $hour->fetch();
         if($hour[0] == 2)
         {
-             if(!in_array($id, $present) && date($time < "9:14:59"))
+             if(!in_array($id, $present) && (strtotime($time) < strtotime("9:15:59")))
                 {
+                 echo "memes";
                     $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
                     $sql = $this->conn->prepare($query);
                     $sql->execute(array(':giorno'=>date("Y-m-d"), ':id'=>$id));
                     return true;
                 }
-                elseif(!in_array($id, $present) && date($time < "9:30:59"))
+                elseif(!in_array($id, $present) && (strtotime($time) < strtotime("9:30:59")))
                 {
                     $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
@@ -135,7 +136,7 @@ function setPresente($id)
                     $sql = $this->conn->prepare($query);
                     $sql->execute(array(':idev'=>4, ':id'=>$id, ':giorno'=>date("Y-m-d")));
                 }
-                elseif(!in_array($id, $present) && date($time < "10:30:59"))
+                elseif(!in_array($id, $present) && (strtotime($time) < strtotime("10:30:59")))
                 {
                     $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
@@ -147,9 +148,9 @@ function setPresente($id)
                     $sql->execute(array(':idev'=>2, ':id'=>$id, ':giorno'=>date("Y-m-d")));
                 }
         }
-        elseif($hour == 3)
+        elseif($hour[0] == 3)
         {
-            if(!in_array($id, $present) && date($time < "10:14:59"))
+            if(!in_array($id, $present) && (strtotime($time) < strtotime("10:14:59")))
                 {
                     $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
@@ -157,7 +158,7 @@ function setPresente($id)
                     $sql->execute(array(':giorno'=>date("Y-m-d"), ':id'=>$id));
                     return true;
                 }
-                elseif(!in_array($id, $present) && date($time < "10:30:59"))
+                elseif(!in_array($id, $present) && (strtotime($time) < strtotime("10:30:59")))
                 {
                     $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
@@ -172,8 +173,7 @@ function setPresente($id)
     }
     else
     {
-
-        if(!in_array($id, $present) && date($time < "8:14:59"))
+        if(!in_array($id, $present) && (strtotime($time) < strtotime("8:14:59")))
         {
             $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
@@ -181,7 +181,7 @@ function setPresente($id)
             $sql->execute(array(':giorno'=>date("Y-m-d"), ':id'=>$id));
             return true;
         }
-        elseif(!in_array($id, $present) && date($time < "8:30:59"))
+        elseif(!in_array($id, $present) && (strtotime($time) < strtotime("8:30:59")))
         {
             $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
@@ -192,7 +192,7 @@ function setPresente($id)
             $sql = $this->conn->prepare($query);
             $sql->execute(array(':idev'=>4, ':id'=>$id, ':giorno'=>date("Y-m-d")));
         }
-        elseif(!in_array($id, $present) && date($time < "9:30:59"))
+        elseif(!in_array($id, $present) && (strtotime($time) < strtotime("9:30:59")))
         {
             $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
@@ -203,7 +203,7 @@ function setPresente($id)
             $sql = $this->conn->prepare($query);
             $sql->execute(array(':idev'=>2, ':id'=>$id, ':giorno'=>date("Y-m-d")));
         }
-        elseif(!in_array($id, $present) && date($time < "10:30:59"))
+        elseif(!in_array($id, $present) && (strtotime($time) < strtotime("10:30:59")))
         {
             $query = "insert into presenze (giorno, id_studente) values (:giorno, :id)";
 
@@ -218,6 +218,35 @@ function setPresente($id)
     }catch (Exception $e)
     {
         echo "badge non valido";
+    }
+}
+function checkAssenza()
+{
+    date_default_timezone_set("Europe/Rome");
+    $current = date("H:i:s");
+    $day = date("Y-m-d");
+    
+    $query = "select * from studenti where idstudenti not in (select id_studente from presenze where giorno = '$day')";
+    $result = $this->runQuery($query);
+    while ($row = $result->fetch())
+    {
+        $id = $row['idstudenti'];
+        $this->setAssente($id, $day);
+    }
+}
+function setAssente($id, $day)
+{
+    $assenti = array();
+    $query = "select * from stev where giorno ='$day'";
+    $result = $this->runQuery($query);
+    while ($row = $result->fetch())
+    {
+        array_push($assenti, $row['id_studente']);
+    }
+    if(!in_array($id, $assenti))
+    {
+        $query = "insert into stev (id_evento, id_studente, giorno, giustificato) values (1, $id,'$day', 0)";
+        $this->runQuery($query);
     }
 }
 }

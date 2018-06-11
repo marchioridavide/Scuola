@@ -70,3 +70,7 @@
     overflow-y: scroll;
     min-height: 200px;
 }
+.spaced
+{
+    padding:50px;
+}

@@ -13,6 +13,7 @@
             <ul class="navbar-nav mr-auto">
                 <?php
                   session_start();
+                  //if(!isset($_SERVER['https'])) header("Location: https://127.0.0.1/Scuola/add_account.php");
                   if($_SESSION['admin'] == true)
                   {
                     echo '<li class="nav-item active">
