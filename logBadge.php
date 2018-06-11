@@ -7,7 +7,7 @@
     $badgeid = $_GET["badgeId"];
     $dbhandle = new dbcontroller();
 
-    $dbhandle->checkAssenza();S
+    $dbhandle->checkAssenza();
     
 ?>
 

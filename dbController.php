@@ -244,12 +244,16 @@ function checkAssenza()
     $current = date("H:i:s");
     $day = date("Y-m-d");
     
-    $query = "select * from studenti where idstudenti not in (select id_studente from presenze where giorno = '$day')";
-    $result = $this->runQuery($query);
-    while ($row = $result->fetch())
+    if(strtotime($current) > strtotime("10:30:59"))
     {
-        $id = $row['idstudenti'];
-        $this->setAssente($id, $day);
+    echo "ses";
+        $query = "select * from studenti where idstudenti not in (select id_studente from presenze where giorno = '$day')";
+        $result = $this->runQuery($query);
+        while ($row = $result->fetch())
+        {
+            $id = $row['idstudenti'];
+            $this->setAssente($id, $day);
+        }
     }
 }
 function setAssente($id, $day)
