@@ -77,11 +77,12 @@ function isadmin($id)
 
 function login_control($username, $pasw){
   try{
-    $query = "SELECT * FROM accounts WHERE username='$username' AND password='".md5($passw)."'";
+      $md5pasw = md5($pasw);
+    $query = "SELECT * FROM accounts WHERE username='$username' AND password='$md5pasw'";
     $result = $this->runQuery($query);
     $res = $result->fetch();
     $id = $res['id'];
-    if(is_numeric[$id])
+    if(is_numeric($id))
     {
         return $id;
     }

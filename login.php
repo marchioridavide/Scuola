@@ -46,6 +46,9 @@
                 $dbhandler = new dbcontroller();
                 if (isset($_POST['type']) && $_POST['type'] == "log")
                 {
+                    $pasw = $_POST['pass'];
+                    echo $pass;
+                    echo $POST['username'];
                     $res = $dbhandler->login_control($_POST['username'], $_POST['pass']);
                     if($res != false)
                     {

@@ -83,7 +83,9 @@
                 if (isset($_POST['type']) && $_POST['type'] == "add")
                 {
                     $username = $_POST['username'];
-                    $pswmd5 = md5($_POST['password']);
+                    $pasw = $_POST['password'];
+                    $pswmd5 = md5($pasw);
+                    
                     if(isset($_POST['prof']) && $_POST['prof']!= "")
                     {
                         $data = explode(",", $_POST['prof']);
