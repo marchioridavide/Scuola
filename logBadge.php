@@ -119,15 +119,32 @@
     while($row = $result->fetch())           //apply notifications badge
     {
         $id = $row[0];
-        $notifications = $dbhandle->numRows("select * from stev where id_studente = $id");
+        $notifications = $dbhandle->numRows("select * from stev where id_studente = $id and giustificato = 0");
         echo "<tr class = 'presente'>";
         if($notifications != 0)
         {
-            echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td><center><div class = 'notifications'><a data-toggle='modal' href='#bigmodal'>$notifications</a></div></center></td>";
+            echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td>
+            <td><center> 
+                <form action='eventi.php' method='GET'>
+                    <input type='hidden' name='idstudente' value=".$row[0]. " />
+                    <input type='hidden' name='nome' value=".$row[1]. " />
+                    <input type='hidden' name='cognome' value=".$row[2]. " />
+                    <button type='submit' class='notifications'> $notifications </button>
+                </form>
+            </center></td>";
         }
         else
         {
-            echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td></td>";
+            echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>
+                <center> 
+                <form action='eventi.php' method='GET'>
+                    <input type='hidden' name='idstudente' value=".$row[0]. " />
+                    <input type='hidden' name='nome' value=".$row[1]. " />
+                    <input type='hidden' name='cognome' value=".$row[2]. " />
+                    <button type='submit' class='alljustified'> 0 </button>
+                </form>
+            </center>
+            </td>";
         }
         echo "</tr>";
     }

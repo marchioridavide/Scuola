@@ -24,7 +24,16 @@
     color: white;
     border-radius: 100%;
     text-align: center;
-    width:22px
+    width:22px;
+    border:0px;
+}
+.alljustified{
+    background-color: forestgreen;
+    color: white;
+    border-radius: 100%;
+    text-align: center;
+    width:22px;
+    border:0px;
 }
 .inputtext{
     border-color: #1697af;

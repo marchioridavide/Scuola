@@ -93,6 +93,23 @@ function login_control($username, $pasw){
     return false;
   }
 }
+      
+function UpdateGiustifica($idstudente)
+{
+    try
+    {
+        $query="UPDATE stev SET giustificato = '1' WHERE id_studente='$idstudente' ";
+        $result = $this->runQuery($query);
+        $current = $_SERVER['REQUEST_URI']; 
+        Header("Location: logBadge.php");
+    }
+    catch(PDOException $e)
+    {
+        echo 'Error ' . $e->getMessage();
+        return false;
+    }
+}
+      
 function setPresente($id)
 {
     try
@@ -250,6 +267,7 @@ function setAssente($id, $day)
         $this->runQuery($query);
     }
 }
+
 }
 
  ?>
