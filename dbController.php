@@ -57,8 +57,9 @@ function register($user, $pwd, $admin, $idprof){
           return true;
      }
      catch(PDOException $e){
-            echo 'Error: '.$e->getMessage();
-            return false;
+            echo "<script language = 'javascript'>
+            alert('Lo username utilizzato è già presente nel database');
+            </script>";
      }
 }
 

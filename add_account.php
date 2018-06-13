@@ -48,6 +48,10 @@
                 <input type = 'password' placeholder = "password" name = "password" class="form-control" id="exampleInputPassword1">
             </div>
             
+            <div class="form-group">
+                <input type = 'password' placeholder = "Conferma password" name = "conferma" class="form-control" id="exampleInputPassword1">
+            </div>
+            
             
             <input type = "hidden" name = "type" value = "add">
             
@@ -79,31 +83,40 @@
         </form>
         </div>
             <?php
-            
+                
                 if (isset($_POST['type']) && $_POST['type'] == "add")
                 {
-                    $username = $_POST['username'];
-                    $pasw = $_POST['password'];
-                    $pswmd5 = md5($pasw);
-                    
-                    if(isset($_POST['prof']) && $_POST['prof']!= "")
+                    if($_POST['password'] == $_POST['conferma'])
                     {
-                        $data = explode(",", $_POST['prof']);
-                        $idprof = $data[0];
-                        if (isset($_POST['admin']))
+                        $username = $_POST['username'];
+                        $pasw = $_POST['password'];
+                        $pswmd5 = md5($pasw);
+
+                        if(isset($_POST['prof']) && $_POST['prof']!= "")
                         {
-                            if($dbhandler->register($username, $pswmd5, 1, $idprof)) showPopUp();
+                            $data = explode(",", $_POST['prof']);
+                            $idprof = $data[0];
+                            if (isset($_POST['admin']))
+                            {
+                                if($dbhandler->register($username, $pswmd5, 1, $idprof)) showPopUp();
+                            }
+                            else
+                            {
+                                if($dbhandler->register($username, $pswmd5, null, $idprof)) showPopUp();
+                            }
                         }
-                        else
+                        elseif(isset($_POST['admin']))
                         {
-                            if($dbhandler->register($username, $pswmd5, null, $idprof)) showPopUp();
+                            if($dbhandler->register($username, $pswmd5, 1, null)) showPopUp();
                         }
+                        elseif($dbhandler->register($username, $pswmd5, null, null)) showPopUp();
                     }
-                    elseif(isset($_POST['admin']))
+                    else
                     {
-                        if($dbhandler->register($username, $pswmd5, 1, null)) showPopUp();
+                        echo "<script language = 'javascript'>
+                        alert('password non conforme');
+                        </script>";
                     }
-                    elseif($dbhandler->register($username, $pswmd5, null, null)) showPopUp();
                 }
                 function showPopUp()
                 {
