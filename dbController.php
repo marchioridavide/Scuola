@@ -2,7 +2,7 @@
   Class dbcontroller{
 
   private $servername="localhost";
-  private $username="root";
+  private $username="user1";
   private $password="mysql";
   private $dbname="scuola";
   private $conn;
@@ -246,7 +246,6 @@ function checkAssenza()
     
     if(strtotime($current) > strtotime("10:30:59"))
     {
-    echo "ses";
         $query = "select * from studenti where idstudenti not in (select id_studente from presenze where giorno = '$day')";
         $result = $this->runQuery($query);
         while ($row = $result->fetch())

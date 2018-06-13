@@ -37,7 +37,7 @@
                 </div>
 
                 <input type = "hidden" name = "type" value = "log">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary" value = "Log in">Submit</button>
             </form>
         </div>
             <?php
@@ -59,12 +59,13 @@
                     }
                     else
                     {
-                        echo "Username o password errata";
+                        echo "<script language='javascript'>
+			alert('Username o password errata');</script>";
                     }
                 }
                 function showPopUp()
                 {
-                    echo "<script type='text/javascript'>
+                    echo "<script type = 'text/javascript'>
                     $(document).ready(function(){
                     $('#exampleModalCenter').modal('show');
                     });
