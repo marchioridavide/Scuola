@@ -41,6 +41,9 @@
                   echo '<li class="nav-item">
                   <a class="nav-link" href="add_account.php">Aggiungi utente<span class="sr-only">(current)</span></a>
                     </li>';
+                    echo '<li class="nav-item ">
+                    <a class="nav-link" href="entrate_posticipate.php">Entrate posticipate<span class="sr-only">(current)</span></a>
+                    </li>';
                 }
                  if(isset($_SESSION['user_logged']))
                 {
@@ -119,7 +122,7 @@
     while($row = $result->fetch())           //apply notifications badge
     {
         $id = $row[0];
-        $notifications = $dbhandle->numRows("select * from stev where id_studente = $id and giustificato = 0");
+        $notifications = $dbhandle->numRows("select * from stev where id_studente = $id and giustificato = 0 and visualizza = 0");
         echo "<tr class = 'presente'>";
         if($notifications != 0)
         {
@@ -171,6 +174,7 @@
             <th scope='col'>Nome</th>
             <th scope='col'>Cognome</th>
             <th scope='col'>Data di nascita</th>
+            <th scope='col'>Eventi</th>
             </tr>
         </thead>
         
@@ -178,8 +182,34 @@
 
     while($row = $result->fetch())
     {
+        $id = $row[0];
+        $notifications = $dbhandle->numRows("select * from stev where id_studente = $id and giustificato = 0 and visualizza = 0");
         echo "<tr>";
-        echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td>";
+        if($notifications != 0)
+        {
+            echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td>
+            <td><center> 
+                <form action='eventi.php' method='GET'>
+                    <input type='hidden' name='idstudente' value=".$row[0]. " />
+                    <input type='hidden' name='nome' value=".$row[1]. " />
+                    <input type='hidden' name='cognome' value=".$row[2]. " />
+                    <button type='submit' class='notifications'> $notifications </button>
+                </form>
+            </center></td>";
+        }
+        else
+        {
+            echo "<td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>
+                <center> 
+                <form action='eventi.php' method='GET'>
+                    <input type='hidden' name='idstudente' value=".$row[0]. " />
+                    <input type='hidden' name='nome' value=".$row[1]. " />
+                    <input type='hidden' name='cognome' value=".$row[2]. " />
+                    <button type='submit' class='alljustified'> 0 </button>
+                </form>
+            </center>
+            </td>";
+        }
         echo "</tr>";
     }
     

@@ -19,6 +19,9 @@
                     echo '<li class="nav-item active">
                     <a class="nav-link" href="add_account.php">Aggiungi utente<span class="sr-only">(current)</span></a>
                     </li>';
+                    echo '<li class="nav-item ">
+                    <a class="nav-link" href="entrate_posticipate.php">Entrate posticipate<span class="sr-only">(current)</span></a>
+                    </li>';
                   }
                   if(isset($_SESSION['user_logged']))
                   {

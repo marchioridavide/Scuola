@@ -2,7 +2,7 @@
   Class dbcontroller{
 
   private $servername="localhost";
-  private $username="user1";
+  private $username="root";
   private $password="mysql";
   private $dbname="scuola";
   private $conn;
@@ -95,14 +95,14 @@ function login_control($username, $pasw){
   }
 }
       
-function UpdateGiustifica($idstudente)
+function UpdateGiustifica($idstudente, $idevento)
 {
     try
     {
-        $query="UPDATE stev SET giustificato = '1' WHERE id_studente='$idstudente' ";
+        $query="UPDATE stev SET giustificato = '1' WHERE id_studente='$idstudente' AND id='$idevento'";
         $result = $this->runQuery($query);
         $current = $_SERVER['REQUEST_URI']; 
-        Header("Location: logBadge.php");
+        return true;
     }
     catch(PDOException $e)
     {
@@ -265,12 +265,56 @@ function setAssente($id, $day)
     {
         array_push($assenti, $row['id_studente']);
     }
-    if(!in_array($id, $assenti))
+    $query = "select * from studenti, classi, entrate_posticipate where studenti.idstudenti = '$id' and studenti.idClasse = classi.idClassi and classi.idClassi = entrate_posticipate.idclasse and entrate_posticipate.giorno = '$day' and entrate_posticipate.in_ora = '0'";
+    $result = $this->numRows($query);
+    if(!in_array($id, $assenti) && $result == 0)
     {
-        $query = "insert into stev (id_evento, id_studente, giorno, giustificato) values (1, $id,'$day', 0)";
+        $query = "insert into stev (id_evento, id_studente, giorno, giustificato, visualizza) values (1, $id,'$day', 0, 0)";
         $this->runQuery($query);
     }
 }
+function addEntrata($classe, $giorno, $ora)
+{
+    $code = $ora;
+    switch($ora)
+    {
+        case "2 ora":
+            $code = 2;
+            break;
+        case "3 ora":
+            $code = 3;
+            break;
+        case "Non entra":
+            $code = 0;
+            break;
+    }
+    $query = "select idClassi from classi where classi.Nome = '$classe'";
+    $result = $this->runQuery($query);
+    $row = $result->fetch();
+    $class = $row[0];
+    $query = "insert into entrate_posticipate (giorno, idclasse, in_ora) values ('$giorno', '$class', '$code')";
+    $this->runQuery($query);
+    echo "<script language = 'javascript'>
+        alert('Eccezione aggiunta correttamente');
+    </script>";
+}
+      
+function UpdateGiustificaVisual($idstudente, $idevento)
+{
+    try
+    {
+        $query="UPDATE stev SET visualizza = '1' WHERE id_studente='$idstudente' AND id='$idevento'";
+        $result = $this->runQuery($query);
+        $current = $_SERVER['REQUEST_URI']; 
+        return true;
+    }
+    catch(PDOException $e)
+    {
+        echo 'Error ' . $e->getMessage();
+        return false;
+    }
+}
+    
 
 }
 
